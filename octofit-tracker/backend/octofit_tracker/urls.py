@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.http import JsonResponse
+import os
+
+def api_root(request, component):
+    codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
+    url = f"https://{codespace_name}-8000.app.github.dev/api/{component}/"
+    return JsonResponse({"api_url": url})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/<str:component>/', api_root),
 ]
